@@ -1,0 +1,15 @@
+{
+  "name": "cube",
+  "version": "1.0.0",
+  "description": "Implementação de um cubo 3D rotacionável.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx serve"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.5"
+  }
+}
