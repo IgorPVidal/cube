@@ -8,12 +8,25 @@ export class ScreenController {
     #screenView;
     #cubeController;
     #playing;
+    #controls;
     #show(element) {
         try {
             this.#screenView.show(element.draw())
         } catch (error) {
             console.log(`Error caught! [${error}]`)
         }
+    }
+    #executeControls() {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve("resolved")
+            }, 20)
+            Object.keys(this.#controls).forEach(key => {
+                if (this.#controls[key].pressed) {
+                    this.#controls[key].func()
+                }
+            })
+        })
     }
     #updateScreen() {
         let edges = this.#screenModel.setEdges(this.#cubeController.getEdges())
@@ -27,13 +40,21 @@ export class ScreenController {
         this.#screenView = new ScreenView(width, height)
         this.#cubeController = new CubeController()
         this.#playing = true
+        const controls = {
+            "w": {pressed: false, func: () => {this.rotateUp()}},
+            "a": {pressed: false, func: () => {this.rotateLeft()}},
+            "s": {pressed: false, func: () => {this.rotateDown()}},
+            "d": {pressed: false, func: () => {this.rotateRight()}},
+            "p": {pressed: false, func: () => {this.#playing = false}}
+        }
+        this.#controls = controls
     }
     async play() {
         this.#show(this)
         console.log("start")
         while (this.#playing) {
             this.#updateScreen()
-            this.#playing = false
+            const result = await this.#executeControls()
         }
         console.log("stop")
     }
@@ -42,5 +63,27 @@ export class ScreenController {
     }
     draw() {
         return this.#screenView.draw()
+    }
+    updateKeyDown(key) {
+        if (this.#controls[key]) {
+            this.#controls[key].pressed = true
+        }
+    }
+    updateKeyUp(key) {
+        if (this.#controls[key]) {
+            this.#controls[key].pressed = false
+        }
+    }
+    rotateUp() {
+        this.#screenModel.rotateUp()
+    }
+    rotateLeft() {
+        this.#screenModel.rotateLeft()
+    }
+    rotateDown() {
+        this.#screenModel.rotateDown()
+    }
+    rotateRight() {
+        this.#screenModel.rotateRight()
     }
 }
