@@ -41,6 +41,17 @@ export class ScreenView {
     draw() {
         return this.#canvas
     }
+    drawEdges(edges, color) {
+        let edge = null
+        for (let i = 0; i < edges.length; i++) {
+            edge = edges[i]
+            this.#ctx.beginPath()
+            this.#ctx.moveTo(edge[0].x, edge[0].y)
+            this.#ctx.lineTo(edge[1].x, edge[1].y)
+            this.#ctx.strokeStyle = color
+            this.#ctx.stroke()
+        }
+    }
     // fixme talvez adicionar elementos na página não precisaria ser feito pela ScreenView
     show(element) {
         if (element.id) {
